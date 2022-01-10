@@ -7,13 +7,6 @@ import { auth } from "../../firebase/clientApp";
 export const Layout:React.FC = ({ children }) => {
     const [user] = useAuthState(auth)
     
-    if (!user){
-        console.log("gaada user");
-    } else{
-        console.log("hai2");
-        console.log(user);
-    }
-
     return(
         <div className="flex flex-col min-h-screen">
             <Head>
@@ -25,7 +18,7 @@ export const Layout:React.FC = ({ children }) => {
             <main className="flex flex-col mx-40 my-24">
                 {children}
             </main>
-            {/* <Footer/> */}
+            <Footer/>
         </div>
     )
 }

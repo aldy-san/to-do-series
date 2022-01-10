@@ -1,7 +1,7 @@
 import firebase from 'firebase/compat/app'
 import {getApp} from 'firebase/app'
 import 'firebase/compat/auth'
-import 'firebase/compat/firestore'
+import { getFirestore } from "firebase/firestore"
 import { getAuth } from "firebase/auth"
 const clientCredentials = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -16,5 +16,6 @@ if(!firebase.apps.length){
     firebase.initializeApp(clientCredentials);
 }
 const auth = getAuth(getApp())
-export {auth}
+const db = getFirestore()
+export {auth, db}
 export default firebase
