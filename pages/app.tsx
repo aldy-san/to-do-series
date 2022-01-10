@@ -11,7 +11,7 @@ const App = () => {
   const router = useRouter();
   const [series, setSeries] = useState([])
   const [title, setTitle] = useState("")
-  const [episode, setEpisode] = useState(0)
+  const [episode, setEpisode] = useState(1)
   const [day, setDay] = useState("Day")
   const [show, setShow] = useState(false)
   const [user] = useAuthState(auth)
@@ -47,8 +47,9 @@ const App = () => {
     await addDoc(collection(db, "series"),temp)
     getItem()
     setTitle("")
-    setEpisode(0)
+    setEpisode(1)
     setDay("Day")
+    setShow(false)
   }
   
   return (
