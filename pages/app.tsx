@@ -26,7 +26,7 @@ const App = () => {
         getSeries.forEach((doc) => {
           let tempData = doc.data();
           tempData["itemId"] = doc.id;
-          tempSeries.push(doc.data());
+          tempSeries.push(tempData);
         });
         setSeries(tempSeries)
       });
@@ -85,7 +85,7 @@ const App = () => {
           {
             series.map((item, idx)=>{
               return (
-                <SeriesItem key={idx} data={item}/>
+                <SeriesItem key={idx} data={item} getItem={getItem}/>
               )
             })
           }
