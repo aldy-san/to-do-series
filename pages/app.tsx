@@ -1,5 +1,4 @@
 import firebase, {auth,db} from '../src/firebase/clientApp'
-import { signOut } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import { Layout } from '../src/components/core/layout'
 import { WithAuth } from '../src/components/core/with-auth'
@@ -66,22 +65,22 @@ const App = () => {
               </svg>
             </button>
           </div>
-          <div className={(show ? "block" : "hidden") + " origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white"} >
+          <div className={(show ? "block" : "hidden") + " origin-top-right absolute right-0 mt-2 w-28 rounded-md shadow-lg bg-white"} >
             <div className="py-1">
-              <button className="text-gray-700 block px-4 py-2 text-sm" onClick={() => {setDay("Monday"); setShow(false)}}>Monday</button>
-              <button className="text-gray-700 block px-4 py-2 text-sm" onClick={() => {setDay("Tuesday"); setShow(false)}}>Tuesday</button>
-              <button className="text-gray-700 block px-4 py-2 text-sm" onClick={() => {setDay("Wednesday"); setShow(false)}}>Wednesday</button>
-              <button className="text-gray-700 block px-4 py-2 text-sm" onClick={() => {setDay("Thursday"); setShow(false)}}>Thursday</button>
-              <button className="text-gray-700 block px-4 py-2 text-sm" onClick={() => {setDay("Friday"); setShow(false)}}>Friday</button>
-              <button className="text-gray-700 block px-4 py-2 text-sm" onClick={() => {setDay("Saturday"); setShow(false)}}>Saturday</button>
-              <button className="text-gray-700 block px-4 py-2 text-sm" onClick={() => {setDay("Sunday"); setShow(false)}}>Sunday</button>
+              <button className="text-gray-700 block px-4 py-2 text-sm w-full font-medium text-right" onClick={() => {setDay("Monday"); setShow(false)}}>Monday</button>
+              <button className="text-gray-700 block px-4 py-2 text-sm w-full font-medium text-right" onClick={() => {setDay("Tuesday"); setShow(false)}}>Tuesday</button>
+              <button className="text-gray-700 block px-4 py-2 text-sm w-full font-medium text-right" onClick={() => {setDay("Wednesday"); setShow(false)}}>Wednesday</button>
+              <button className="text-gray-700 block px-4 py-2 text-sm w-full font-medium text-right" onClick={() => {setDay("Thursday"); setShow(false)}}>Thursday</button>
+              <button className="text-gray-700 block px-4 py-2 text-sm w-full font-medium text-right" onClick={() => {setDay("Friday"); setShow(false)}}>Friday</button>
+              <button className="text-gray-700 block px-4 py-2 text-sm w-full font-medium text-right" onClick={() => {setDay("Saturday"); setShow(false)}}>Saturday</button>
+              <button className="text-gray-700 block px-4 py-2 text-sm w-full font-medium text-right" onClick={() => {setDay("Sunday"); setShow(false)}}>Sunday</button>
             </div>
           </div>
         </div>
 
           <button className="shadow-lg px-4 py-2 rounded-md bg-gray-800 text-white font-bold" onClick={()=> {AddItem()}}>Add</button>
         </div>
-        <div className="grid grid-cols-3 mt-16 gap-4">
+        <div className="grid grid-cols-3 mt-16 gap-4 min-h-full">
           {
             series.map((item, idx)=>{
               return (
@@ -90,10 +89,7 @@ const App = () => {
             })
           }
         </div>
-        <button className="bg-red-500 mt-24" onClick={() => { signOut(auth).then(()=>{
-          router.push('/auth')
-          console.log("keluar");
-        })}}>keluar</button>
+        
       </Layout>
     </WithAuth>
   )
