@@ -12,7 +12,7 @@ export default function SignInScreen(){
     return(
         <WithoutAuth>
             <Layout>
-                <div className="flex flex-col bg-gray-800 text-white mx-72 py-8 rounded-lg space-x-6">
+                <div className="flex flex-col bg-gray-800 text-white mx-72 py-8 rounded-lg space-y-3">
                     <h1 className="mx-auto font-bold text-2xl">Welcome</h1>
                     <span className="mx-auto text-lg">Nice to meet you again</span>
                     <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
