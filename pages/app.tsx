@@ -41,7 +41,8 @@ const App = () => {
       title:title, 
       maxEpisode: episode,
       currentEpisode: 1,
-      dayUpdate: day
+      dayUpdate: day,
+      isCompleted: false
     }
     await addDoc(collection(db, "series"),temp)
     getItem()
