@@ -38,13 +38,15 @@ export default function SeriesItem(data:item){
     }
 
     return (
-        <div className="flex flex-col col-span-1 p-4 shadow-md rounded-lg space-y-3 ">
+        <div className="flex flex-col col-span-1 p-4 shadow-md rounded-lg space-y-2">
             <span className="font-bold text-xl">{data.data.title}</span>
-            <span className="font-medium text-lg">Episode: {data.data.currentEpisode}/{data.data.maxEpisode}</span>
+            <span className="font-medium text-lg mt-auto">Episode: {data.data.currentEpisode}/{data.data.maxEpisode}</span>
             <span className="text-lg">Next episode release on <span className="font-bold">{data.data.dayUpdate}</span></span>
-            <div className="flex w-full space-x-2">
-                <button className="flex-1 bg-red-600 text-white font-bold py-1 rounded-lg active:brightness-90" onClick={() => { DeleteItem(data.data.itemId) }}>Delete</button>
-                <button disabled={data.data.isCompleted} className={(data.data.isCompleted ? "brightness-75" : "") + " flex-1 bg-green-600 text-white font-bold py-1 rounded-lg active:brightness-90"} onClick={() => { UpdateEpisode(data.data.itemId, data.data.currentEpisode, data.data.maxEpisode) }}>{(data.data.currentEpisode == data.data.maxEpisode) ? "Complete" : "Next"}</button>
+            <div className="flex w-full space-x-2 h-full">
+                <button className="flex-1 bg-red-600 text-white font-bold py-1 rounded-lg active:brightness-90 mt-auto" onClick={() => { DeleteItem(data.data.itemId) }}>Delete</button>
+                <button className={(data.data.isCompleted ? "brightness-75" : "") + " flex-1 bg-green-600 text-white font-bold py-1 rounded-lg active:brightness-90 mt-auto"} 
+                        onClick={() => { UpdateEpisode(data.data.itemId, data.data.currentEpisode, data.data.maxEpisode) }}
+                        disabled={data.data.isCompleted}>{(data.data.currentEpisode == data.data.maxEpisode) ? "Complete" : "Next"}</button>
             </div>
         </div>
     )
