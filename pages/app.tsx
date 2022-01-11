@@ -19,15 +19,17 @@ const App = () => {
   
     async function getItem() {
       firebase.auth().onAuthStateChanged(async function(user) {
-        const q = query(collection(db, "series"), where("uid", "==", user?.uid))
-        const getSeries = await getDocs(q);
-        let tempSeries = [] as any
-        getSeries.forEach((doc) => {
-          let tempData = doc.data();
-          tempData["itemId"] = doc.id;
-          tempSeries.push(tempData);
-        });
-        setSeries(tempSeries)
+        if (user) {
+          const q = query(collection(db, "series"), where("uid", "==", user?.uid))
+          const getSeries = await getDocs(q);
+          let tempSeries = [] as any
+          getSeries.forEach((doc) => {
+            let tempData = doc.data();
+            tempData["itemId"] = doc.id;
+            tempSeries.push(tempData);
+          });
+          setSeries(tempSeries)
+        }
       });
     }
   
@@ -82,7 +84,7 @@ const App = () => {
 
           <button className="shadow-lg px-4 py-2 rounded-md bg-gray-800 text-white font-bold" onClick={()=> {AddItem()}}>Add</button>
         </div>
-        <div className="grid grid-cols-3 mt-16 gap-4 min-h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full">
           {
             series.map((item, idx)=>{
               return (
