@@ -6,8 +6,23 @@ import SeriesItem from '../src/components/series-item'
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore"
 import { useEffect, useState } from 'react'
 import { useAuthState } from "react-firebase-hooks/auth";
-
+type items = {
+  itemId: string,
+  title: string,
+  maxEpisode: number,
+  currentEpisode: number,
+  dayUpdate?: string,
+  isCompleted: boolean
+}
 const App = () => {
+  const itemDefault = {
+    itemId: '',
+    title: '',
+    maxEpisode: 0,
+    currentEpisode: 0,
+    dayUpdate: '',
+    isCompleted: false
+  }
   const router = useRouter();
   const [series, setSeries] = useState([])
   const [title, setTitle] = useState("")
@@ -15,29 +30,34 @@ const App = () => {
   const [day, setDay] = useState("Day")
   const [show, setShow] = useState(false)
   const [user] = useAuthState(auth)
+  const [itemPopUp, setItemPopUp] = useState(itemDefault)
 
   
-    async function getItem() {
-      firebase.auth().onAuthStateChanged(async function(user) {
-        if (user) {
-          const q = query(collection(db, "series"), where("uid", "==", user?.uid))
-          const getSeries = await getDocs(q);
-          let tempSeries = [] as any
-          getSeries.forEach((doc) => {
-            let tempData = doc.data();
-            tempData["itemId"] = doc.id;
-            tempSeries.push(tempData);
-          });
-          setSeries(tempSeries)
-        }
-      });
-    }
-  
+  async function getItem() {
+    firebase.auth().onAuthStateChanged(async function(user) {
+      if (user) {
+        const q = query(collection(db, "series"), where("uid", "==", user?.uid))
+        const getSeries = await getDocs(q);
+        let tempSeries = [] as any
+        getSeries.forEach((doc) => {
+          let tempData = doc.data();
+          tempData["itemId"] = doc.id;
+          tempSeries.push(tempData);
+        });
+        setSeries(tempSeries)
+      }
+    });
+  }
   useEffect(() => {
     getItem()
   }, [])
+  function setPopUp(data: any){
+    setItemPopUp( data )
+    console.log(data);
+    
+  }
 
-  async function AddItem() {
+  async function addItem() {
     const temp = {
       uid: user?.uid,
       title:title, 
@@ -82,18 +102,26 @@ const App = () => {
           </div>
         </div>
 
-          <button className="shadow-lg px-4 py-2 rounded-md bg-gray-800 text-white font-bold" onClick={()=> {AddItem()}}>Add</button>
+          <button className="shadow-lg px-4 py-2 rounded-md bg-gray-800 text-white font-bold" onClick={()=> {addItem()}}>Add</button>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full">
           {
             series.map((item, idx)=>{
               return (
-                <SeriesItem key={idx} data={item} getItem={getItem}/>
+                <SeriesItem key={idx} data={item} getItem={getItem} setItemPopUp={setPopUp}/>
               )
             })
           }
         </div>
-        
+        <div className={(itemPopUp.itemId ? "flex" : "hidden") + " fixed flex top-0 left-0 w-screen h-screen bg-gray-400 bg-opacity-20 z-10 items-center"}>
+                <div className="flex-1 flex flex-col bg-gray-100 shadow-lg h-96 mx-96 rounded-lg space-y-3 p-4">
+                    <input className="shadow-lg px-4 py-2 rounded-md border-none" type="text" placeholder="Type the title" onChange={(e) => {setTitle(e.target.value)}} value={title}/>
+                    <input className="shadow-lg px-4 py-2 rounded-md border-none" type="number" placeholder="Type the title" onChange={(e) => {setTitle(e.target.value)}} value={title}/>
+                    <input className="shadow-lg px-4 py-2 rounded-md border-none" type="number" placeholder="Type the title" onChange={(e) => {setTitle(e.target.value)}} value={title}/>
+                    {itemPopUp ? itemPopUp.title : ""}
+                    <button className="bg-yellow-500" onClick={() => {setItemPopUp(itemDefault)}}>close</button>
+                </div>
+            </div>
       </Layout>
     </WithAuth>
   )
