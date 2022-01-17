@@ -22,7 +22,7 @@ const App = () => {
   const [title, setTitle] = useState("")
   const [episode, setEpisode] = useState(1)
   const [itemPopUp, setItemPopUp] = useState(itemDefault)
-  const [radio, setRadio] = useState("")
+  const [dayRadio, setDayRadio] = useState("")
   const [user] = useAuthState(auth)
   
   async function getItem() {
@@ -43,11 +43,18 @@ const App = () => {
   useEffect(() => {
     getItem()
   }, [])
+
   function setPopUp(data: any){
     setItemPopUp( data )
-    console.log(data);
   }
-
+  // function changePopUp(property: string, value: string|number){
+  //   setItemPopUp((prevState => {
+  //     let obj = {...prevState};
+  //     obj['title'] = property;
+  //     console.log(obj);
+  //     return obj
+  //   }))
+  // }
   async function addItem() {
     const temp = {
       uid: user?.uid,
@@ -67,7 +74,7 @@ const App = () => {
   return (
     <WithAuth>
       <Layout>
-        {/* SECTION: Add Item */}
+        {/* ADD ITEM */}
         <div className="flex space-x-4 items-center mx-auto">
           <div className="flex flex-col w-5/6 space-y-2">
             <label htmlFor="addTitle" className="font-medium">Title</label>
@@ -85,8 +92,7 @@ const App = () => {
           </div>
           <Button text="Add" className="bg-gray-800 mt-auto" onClick={()=> {addItem()}}/>
         </div>
-        {/* !SECTION */}
-        {/* SECTION: List Item */}
+        {/* LIST ITEM */}
         <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full">
           {
             series.map((item, idx)=>{
@@ -96,8 +102,7 @@ const App = () => {
             })
           }
         </div>
-        {/* !SECTION */}
-        {/* SECTION: Edit Pop Up */}
+        {/* EDIT POP UP */}
         <div  className={(itemPopUp.itemId ? "flex" : "hidden") + " fixed flex top-0 left-0 w-screen h-screen bg-gray-400 bg-opacity-20 z-10 items-center"}>
             <div className="flex-1 flex flex-col bg-gray-100 shadow-lg mx-96 rounded-lg space-y-4 p-4">
                 <span className="text-2xl font-bold">{itemPopUp ? itemPopUp.title : ""}</span>
@@ -105,7 +110,12 @@ const App = () => {
                 <Input  value={itemPopUp ? itemPopUp.title : ""}
                         type="text"
                         placeholder="Type the title"
-                        onChange={(e) => {setTitle(e.target.value)}}/>
+                        onChange={(e) => {setItemPopUp((prevState => {
+                          let obj = {...prevState};
+                          obj.title = "hai";
+                          console.log(obj);
+                          return obj
+                        }))}}/>
                 <label htmlFor="current" className="font-medium">Episode</label>
                 <div className="flex space-x-3">
                   <div className="flex">
@@ -127,13 +137,13 @@ const App = () => {
                 </div>
                 <label htmlFor="" className="font-medium">Day Update</label>
                 <div className="flex justify-start px-1 space-x-4">
-                  <RadioButton day='Monday' active={radio} onClick={() => {setRadio('Monday');}}/>
-                  <RadioButton day='Tuesday' active={radio} onClick={() => {setRadio('Tuesday')}}/>
-                  <RadioButton day='Wednesday' active={radio} onClick={() => {setRadio('Wednesday')}}/>
-                  <RadioButton day='Thursday' active={radio} onClick={() => {setRadio('Thursday')}}/>
-                  <RadioButton day='Friday' active={radio} onClick={() => {setRadio('Friday')}}/>
-                  <RadioButton day='Saturday' active={radio} onClick={() => {setRadio('Saturday')}}/>
-                  <RadioButton day='Sunday' active={radio} onClick={() => {setRadio('Sunday')}}/>
+                  <RadioButton day='Monday' active={dayRadio} onClick={() => {setDayRadio('Monday');}}/>
+                  <RadioButton day='Tuesday' active={dayRadio} onClick={() => {setDayRadio('Tuesday')}}/>
+                  <RadioButton day='Wednesday' active={dayRadio} onClick={() => {setDayRadio('Wednesday')}}/>
+                  <RadioButton day='Thursday' active={dayRadio} onClick={() => {setDayRadio('Thursday')}}/>
+                  <RadioButton day='Friday' active={dayRadio} onClick={() => {setDayRadio('Friday')}}/>
+                  <RadioButton day='Saturday' active={dayRadio} onClick={() => {setDayRadio('Saturday')}}/>
+                  <RadioButton day='Sunday' active={dayRadio} onClick={() => {setDayRadio('Sunday')}}/>
                 </div>
                 <div className="flex space-x-3 justify-end py-4">
                   <Button text="Close" className="bg-red-500" onClick={() => {setItemPopUp(itemDefault)}}/>
@@ -141,7 +151,6 @@ const App = () => {
                 </div>
             </div>
         </div>
-        {/* !SECTION */}
       </Layout>
     </WithAuth>
   )
