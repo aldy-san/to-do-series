@@ -55,6 +55,7 @@ const App = () => {
       maxEpisode: episode,
       currentEpisode: 1,
       dayUpdate: "",
+      status: "",
       isCompleted: false
     }
     await addDoc(collection(db, "series"),temp)
@@ -66,6 +67,7 @@ const App = () => {
   return (
     <WithAuth>
       <Layout>
+        {/* SECTION: Add Item */}
         <div className="flex space-x-4 items-center mx-auto">
           <div className="flex flex-col w-5/6 space-y-2">
             <label htmlFor="addTitle" className="font-medium">Title</label>
@@ -83,6 +85,8 @@ const App = () => {
           </div>
           <Button text="Add" className="bg-gray-800 mt-auto" onClick={()=> {addItem()}}/>
         </div>
+        {/* !SECTION */}
+        {/* SECTION: List Item */}
         <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full">
           {
             series.map((item, idx)=>{
@@ -92,49 +96,52 @@ const App = () => {
             })
           }
         </div>
+        {/* !SECTION */}
+        {/* SECTION: Edit Pop Up */}
         <div  className={(itemPopUp.itemId ? "flex" : "hidden") + " fixed flex top-0 left-0 w-screen h-screen bg-gray-400 bg-opacity-20 z-10 items-center"}>
-                <div className="flex-1 flex flex-col bg-gray-100 shadow-lg mx-96 rounded-lg space-y-4 p-4">
-                    <span className="text-2xl font-bold">{itemPopUp ? itemPopUp.title : ""}</span>
-                    <label htmlFor="title" className="font-medium">Title</label>
-                    <Input  value={itemPopUp ? itemPopUp.title : ""}
-                            type="text"
-                            placeholder="Type the title"
-                            onChange={(e) => {setTitle(e.target.value)}}/>
-                    <label htmlFor="current" className="font-medium">Episode</label>
-                    <div className="flex space-x-3">
-                      <div className="flex">
-                      <Input  className="w-20"
-                              value={itemPopUp ? itemPopUp.currentEpisode : ""}
-                              type="number"
-                              placeholder="Current"
-                              id="current"
-                              onChange={(e) => {}}/>
-                      </div>
-                      <span className="text-3xl">/</span>
-                      <div className="flex">
-                        <Input  className="w-20"
-                                value={itemPopUp ? itemPopUp.maxEpisode : ""}
-                                type="number"
-                                placeholder="Max"
-                                onChange={(e) => {}}/>
-                      </div>
-                    </div>
-                    <label htmlFor="" className="font-medium">Day Update</label>
-                    <div className="flex justify-start px-1 space-x-4">
-                      <RadioButton day='Monday' active={radio} onClick={() => {setRadio('Monday');}}/>
-                      <RadioButton day='Tuesday' active={radio} onClick={() => {setRadio('Tuesday')}}/>
-                      <RadioButton day='Wednesday' active={radio} onClick={() => {setRadio('Wednesday')}}/>
-                      <RadioButton day='Thursday' active={radio} onClick={() => {setRadio('Thursday')}}/>
-                      <RadioButton day='Friday' active={radio} onClick={() => {setRadio('Friday')}}/>
-                      <RadioButton day='Saturday' active={radio} onClick={() => {setRadio('Saturday')}}/>
-                      <RadioButton day='Sunday' active={radio} onClick={() => {setRadio('Sunday')}}/>
-                    </div>
-                    <div className="flex space-x-3 justify-end py-4">
-                      <Button text="Close" className="bg-red-500" onClick={() => {setItemPopUp(itemDefault)}}/>
-                      <Button text="Save" className="bg-green-500" onClick={() => {setItemPopUp(itemDefault)}}/>
-                    </div>
+            <div className="flex-1 flex flex-col bg-gray-100 shadow-lg mx-96 rounded-lg space-y-4 p-4">
+                <span className="text-2xl font-bold">{itemPopUp ? itemPopUp.title : ""}</span>
+                <label htmlFor="title" className="font-medium">Title</label>
+                <Input  value={itemPopUp ? itemPopUp.title : ""}
+                        type="text"
+                        placeholder="Type the title"
+                        onChange={(e) => {setTitle(e.target.value)}}/>
+                <label htmlFor="current" className="font-medium">Episode</label>
+                <div className="flex space-x-3">
+                  <div className="flex">
+                  <Input  className="w-20"
+                          value={itemPopUp ? itemPopUp.currentEpisode : ""}
+                          type="number"
+                          placeholder="Current"
+                          id="current"
+                          onChange={(e) => {}}/>
+                  </div>
+                  <span className="text-3xl">/</span>
+                  <div className="flex">
+                    <Input  className="w-20"
+                            value={itemPopUp ? itemPopUp.maxEpisode : ""}
+                            type="number"
+                            placeholder="Max"
+                            onChange={(e) => {}}/>
+                  </div>
+                </div>
+                <label htmlFor="" className="font-medium">Day Update</label>
+                <div className="flex justify-start px-1 space-x-4">
+                  <RadioButton day='Monday' active={radio} onClick={() => {setRadio('Monday');}}/>
+                  <RadioButton day='Tuesday' active={radio} onClick={() => {setRadio('Tuesday')}}/>
+                  <RadioButton day='Wednesday' active={radio} onClick={() => {setRadio('Wednesday')}}/>
+                  <RadioButton day='Thursday' active={radio} onClick={() => {setRadio('Thursday')}}/>
+                  <RadioButton day='Friday' active={radio} onClick={() => {setRadio('Friday')}}/>
+                  <RadioButton day='Saturday' active={radio} onClick={() => {setRadio('Saturday')}}/>
+                  <RadioButton day='Sunday' active={radio} onClick={() => {setRadio('Sunday')}}/>
+                </div>
+                <div className="flex space-x-3 justify-end py-4">
+                  <Button text="Close" className="bg-red-500" onClick={() => {setItemPopUp(itemDefault)}}/>
+                  <Button text="Save" className="bg-green-500" onClick={() => {setItemPopUp(itemDefault)}}/>
                 </div>
             </div>
+        </div>
+        {/* !SECTION */}
       </Layout>
     </WithAuth>
   )
