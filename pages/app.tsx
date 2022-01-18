@@ -62,26 +62,6 @@ const App = () => {
     });
   }
 
-  
-  async function getItem() {
-    firebase.auth().onAuthStateChanged(async function(user) {
-      if (user) {
-        const q = query(collection(db, "series"), where("uid", "==", user?.uid))
-        const getSeries = await getDocs(q);
-        let tempSeries = [] as any
-        getSeries.forEach((doc) => {
-          let tempData = doc.data();
-          tempData["itemId"] = doc.id;
-          tempSeries.push(tempData);
-        });
-        setSeries(tempSeries)
-      }
-    });
-  }
-  useEffect(() => {
-    getItem()
-  }, [])
-
   function setPopUp(data: any){
     setItemPopUp( data )
   }
