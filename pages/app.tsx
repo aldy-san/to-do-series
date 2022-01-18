@@ -2,15 +2,25 @@ import firebase, {auth,db} from '../src/firebase/clientApp'
 import { Layout } from '../src/components/core/layout'
 import { WithAuth } from '../src/components/core/with-auth'
 import SeriesItem from '../src/components/series-item'
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore"
+import { collection, doc, addDoc, getDocs, query, where, setDoc } from "firebase/firestore"
 import { useEffect, useState } from 'react'
 import { useAuthState } from "react-firebase-hooks/auth";
 import RadioButton from '../src/components/radio-button'
 import Button from '../src/components/button'
 import Input from '../src/components/input'
 
+interface itemSeries {
+  itemId: string,
+  title: string,
+  maxEpisode: number,
+  currentEpisode: number,
+  status?: string,
+  dayUpdate?: string,
+  isCompleted: boolean
+}
+
 const App = () => {
-  const itemDefault = {
+  const itemDefault: itemSeries = {
     itemId: '',
     title: '',
     maxEpisode: 0,
@@ -18,11 +28,11 @@ const App = () => {
     dayUpdate: '',
     isCompleted: false
   }
+  //list of series
   const [series, setSeries] = useState([])
   const [title, setTitle] = useState("")
   const [episode, setEpisode] = useState(1)
-  const [itemPopUp, setItemPopUp] = useState(itemDefault)
-  const [dayRadio, setDayRadio] = useState("")
+  const [itemPopUp, setItemPopUp] = useState<itemSeries>(itemDefault)
   const [user] = useAuthState(auth)
   
   async function getItem() {
@@ -47,14 +57,12 @@ const App = () => {
   function setPopUp(data: any){
     setItemPopUp( data )
   }
-  // function changePopUp(property: string, value: string|number){
-  //   setItemPopUp((prevState => {
-  //     let obj = {...prevState};
-  //     obj['title'] = property;
-  //     console.log(obj);
-  //     return obj
-  //   }))
-  // }
+  function changePopUp(property: keyof itemSeries, value: any){
+    setItemPopUp((prevState => {
+      let obj: itemSeries = {...prevState, [property]: value };
+      return obj
+    }))
+  }
   async function addItem() {
     const temp = {
       uid: user?.uid,
@@ -71,10 +79,18 @@ const App = () => {
     setEpisode(1)
   }
 
+  async function updateItem() {
+      const docRef = doc(db, "series", itemPopUp.itemId);
+      await setDoc(docRef,itemPopUp);
+  }
+
   return (
     <WithAuth>
       <Layout>
         {/* ADD ITEM */}
+        {/* <div className="fixed top-0 left-0 w-full flex justify-center mt-4">
+          <p className="text-lg bg-green-100 border-2 border-green-400 rounded-lg text-green-500 px-4 py-2 font-normal">Your Data is <span className="text-green-700 font-bold">saved</span></p>
+        </div> */}
         <div className="flex space-x-4 items-center mx-auto">
           <div className="flex flex-col w-5/6 space-y-2">
             <label htmlFor="addTitle" className="font-medium">Title</label>
@@ -110,44 +126,98 @@ const App = () => {
                 <Input  value={itemPopUp ? itemPopUp.title : ""}
                         type="text"
                         placeholder="Type the title"
-                        onChange={(e) => {setItemPopUp((prevState => {
-                          let obj = {...prevState};
-                          obj.title = "hai";
-                          console.log(obj);
-                          return obj
-                        }))}}/>
-                <label htmlFor="current" className="font-medium">Episode</label>
+                        onChange={(e) => {changePopUp('title', e.target.value)}}/>
+                <label htmlFor="" className="font-medium">Episode</label>
                 <div className="flex space-x-3">
-                  <div className="flex">
-                  <Input  className="w-20"
-                          value={itemPopUp ? itemPopUp.currentEpisode : ""}
-                          type="number"
-                          placeholder="Current"
-                          id="current"
-                          onChange={(e) => {}}/>
+                  <div className="flex flex-col space-y-2">
+                    <label htmlFor="current" className="text-sm">Current</label>
+                    <Input  className="w-20"
+                            value={itemPopUp ? itemPopUp.currentEpisode : ""}
+                            type="number"
+                            placeholder="Current"
+                            id="current"
+                            onChange={(e) => {changePopUp('currentEpisode', e.target.value)}}/>
                   </div>
-                  <span className="text-3xl">/</span>
-                  <div className="flex">
+                  <span className="text-4xl mt-auto mb-1">/</span>
+                  <div className="flex flex-col space-y-2">
+                    <label htmlFor="max" className="text-sm">Max</label>
                     <Input  className="w-20"
                             value={itemPopUp ? itemPopUp.maxEpisode : ""}
                             type="number"
                             placeholder="Max"
-                            onChange={(e) => {}}/>
+                            id="max"
+                            onChange={(e) => {changePopUp('maxEpisode', e.target.value)}}/>
                   </div>
+                </div>
+                <label htmlFor="" className="font-medium">Status</label>
+                <div className="flex justify-start px-1 space-x-4">
+                  <RadioButton  day='On-Going' 
+                                name="status"
+                                className="hover:border-cyan-500 active:text-cyan-400"
+                                activeClassName='bg-cyan-500 border-cyan-500' 
+                                active={itemPopUp.status} 
+                                onClick={() => {changePopUp('status', 'On-Going')}}/>
+                  <RadioButton  day='On-Hold' 
+                                name="status"
+                                className="hover:border-yellow-500 active:text-yellow-400"
+                                activeClassName='bg-yellow-500 border-yellow-500' 
+                                active={itemPopUp.status} 
+                                onClick={() => {changePopUp('status', 'On-Hold')}}/>
+                  <RadioButton  day='Completed' 
+                                name="status"
+                                className="hover:border-green-500 active:text-green-400"
+                                activeClassName='bg-green-500 border-green-500' 
+                                active={itemPopUp.status} 
+                                onClick={() => {changePopUp('status', 'Completed')}}/>
                 </div>
                 <label htmlFor="" className="font-medium">Day Update</label>
                 <div className="flex justify-start px-1 space-x-4">
-                  <RadioButton day='Monday' active={dayRadio} onClick={() => {setDayRadio('Monday');}}/>
-                  <RadioButton day='Tuesday' active={dayRadio} onClick={() => {setDayRadio('Tuesday')}}/>
-                  <RadioButton day='Wednesday' active={dayRadio} onClick={() => {setDayRadio('Wednesday')}}/>
-                  <RadioButton day='Thursday' active={dayRadio} onClick={() => {setDayRadio('Thursday')}}/>
-                  <RadioButton day='Friday' active={dayRadio} onClick={() => {setDayRadio('Friday')}}/>
-                  <RadioButton day='Saturday' active={dayRadio} onClick={() => {setDayRadio('Saturday')}}/>
-                  <RadioButton day='Sunday' active={dayRadio} onClick={() => {setDayRadio('Sunday')}}/>
+                  <RadioButton  day='Monday' 
+                                name="day"
+                                className="hover:border-blue-500 active:text-blue-400"
+                                activeClassName='bg-blue-500 border-blue-500' 
+                                active={itemPopUp.dayUpdate} 
+                                onClick={() => {changePopUp('dayUpdate', 'Monday')}}/>
+                  <RadioButton  day='Tuesday' 
+                                name="day"
+                                className="hover:border-blue-500 active:text-blue-400"
+                                activeClassName='bg-blue-500 border-blue-500' 
+                                active={itemPopUp.dayUpdate} 
+                                onClick={() => {changePopUp('dayUpdate', 'Tuesday')}}/>
+                  <RadioButton  day='Wednesday' 
+                                name="day"
+                                className="hover:border-blue-500 active:text-blue-400"
+                                activeClassName='bg-blue-500 border-blue-500' 
+                                active={itemPopUp.dayUpdate} 
+                                onClick={() => {changePopUp('dayUpdate', 'Wednesday')}}/>
+                  <RadioButton  day='Thursday' 
+                                name="day"
+                                className="hover:border-blue-500 active:text-blue-400"
+                                activeClassName='bg-blue-500 border-blue-500' 
+                                active={itemPopUp.dayUpdate} 
+                                onClick={() => {changePopUp('dayUpdate', 'Thursday')}}/>
+                  <RadioButton  day='Friday' 
+                                name="day"
+                                className="hover:border-blue-500 active:text-blue-400"
+                                activeClassName='bg-blue-500 border-blue-500' 
+                                active={itemPopUp.dayUpdate} 
+                                onClick={() => {changePopUp('dayUpdate', 'Friday')}}/>
+                  <RadioButton  day='Saturday' 
+                                name="day"
+                                className="hover:border-blue-500 active:text-blue-400"
+                                activeClassName='bg-blue-500 border-blue-500' 
+                                active={itemPopUp.dayUpdate} 
+                                onClick={() => {changePopUp('dayUpdate', 'Saturday')}}/>
+                  <RadioButton  day='Sunday' 
+                                name="day"
+                                className="hover:border-blue-500 active:text-blue-400"
+                                activeClassName='bg-blue-500 border-blue-500' 
+                                active={itemPopUp.dayUpdate} 
+                                onClick={() => {changePopUp('dayUpdate', 'Sunday')}}/>
                 </div>
                 <div className="flex space-x-3 justify-end py-4">
-                  <Button text="Close" className="bg-red-500" onClick={() => {setItemPopUp(itemDefault)}}/>
-                  <Button text="Save" className="bg-green-500" onClick={() => {setItemPopUp(itemDefault)}}/>
+                  <Button text="Close" className="bg-red-500" onClick={() => {setItemPopUp(itemDefault); getItem()}}/>
+                  <Button text="Save" className="bg-green-500" onClick={() => {updateItem()}}/>
                 </div>
             </div>
         </div>
