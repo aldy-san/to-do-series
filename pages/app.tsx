@@ -48,6 +48,7 @@ const App = () => {
     firebase.auth().onAuthStateChanged(async function(user) {
       if (user) {
         const q = query(collection(db, "series"), where("uid", "==", user?.uid))
+        console.log(user?.uid);
         const getSeries = await getDocs(q);
         let tempSeries = [] as any
         getSeries.forEach((doc) => {
@@ -61,7 +62,9 @@ const App = () => {
       }
     });
   }
-
+  useEffect(() => {
+    getItem()
+  }, [])
   function setPopUp(data: any){
     setItemPopUp( data )
   }
