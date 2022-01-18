@@ -34,6 +34,34 @@ const App = () => {
   const [episode, setEpisode] = useState(1)
   const [itemPopUp, setItemPopUp] = useState<itemSeries>(itemDefault)
   const [user] = useAuthState(auth)
+
+  function compare( a:any, b:any ) {
+    if ( a.title < b.title ){
+      return -1;
+    }
+    if ( a.title > b.title ){
+      return 1;
+    }
+    return 0;
+  }
+  async function getItem() {
+    firebase.auth().onAuthStateChanged(async function(user) {
+      if (user) {
+        const q = query(collection(db, "series"), where("uid", "==", user?.uid))
+        const getSeries = await getDocs(q);
+        let tempSeries = [] as any
+        getSeries.forEach((doc) => {
+          let tempData = doc.data();
+          tempData["itemId"] = doc.id;
+          tempSeries.push(tempData);
+        });
+        
+        tempSeries.sort( compare );
+        setSeries(tempSeries)
+      }
+    });
+  }
+
   
   async function getItem() {
     firebase.auth().onAuthStateChanged(async function(user) {
