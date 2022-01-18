@@ -64,7 +64,7 @@ const App = () => {
   }
   useEffect(() => {
     getItem()
-  }, [])
+  }, []) 
   function setPopUp(data: any){
     setItemPopUp( data )
   }
@@ -102,8 +102,8 @@ const App = () => {
         {/* <div className="fixed top-0 left-0 w-full flex justify-center mt-4">
           <p className="text-lg bg-green-100 border-2 border-green-400 rounded-lg text-green-500 px-4 py-2 font-normal">Your Data is <span className="text-green-700 font-bold">saved</span></p>
         </div> */}
-        <div className="flex space-x-4 items-center mx-auto">
-          <div className="flex flex-col w-5/6 space-y-2">
+        <div className="flex space-x-4 items-center mx-2 max-w-2xl">
+          <div className="flex flex-col w-4/6 space-y-2">
             <label htmlFor="addTitle" className="font-medium">Title</label>
             <Input  value={title}
                     type="text"
@@ -117,7 +117,7 @@ const App = () => {
                     placeholder="Eps"
                     onChange={(e) => {setEpisode(Number(e.target.value))}}/>
           </div>
-          <Button text="Add" className="bg-gray-800 mt-auto" onClick={()=> {addItem()}}/>
+          <Button text="Add" className="bg-gray-800 mt-auto 1/6" onClick={()=> {addItem()}}/>
         </div>
         {/* LIST ITEM */}
         <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full">

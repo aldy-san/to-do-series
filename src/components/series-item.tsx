@@ -42,8 +42,10 @@ export default function SeriesItem(data:item){
     return (
         <>
             <div className="flex flex-col col-span-1 p-4 shadow-md rounded-lg space-y-3">
+                <span className="w-20 h-20 rounded-full bg-gray-200"></span>
                 <span className="font-bold text-xl">{data.data.title}</span>
                 <span className="font-medium text-lg mt-auto">Episode: {data.data.currentEpisode}/{data.data.maxEpisode}</span>
+                <span className="font-bold text-lg mt-auto text-green-500">{data.data.status}</span>
                 <span className={(data.data.dayUpdate != "" ? "" : "hidden ") + "text-lg"}>Next episode release on <span className="font-bold">{data.data.dayUpdate}</span></span>
                 <div className="flex w-full space-x-2 h-full">
                     <Button text="Delete" 
