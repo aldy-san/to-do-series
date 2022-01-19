@@ -161,7 +161,7 @@ const App = () => {
                   </div>
                 </div>
                 <label htmlFor="" className="font-medium">Status</label>
-                <div className="flex flex-col lg:flex-row justify-start px-1 space-x-4">
+                <div className="flex flex-col lg:flex-row justify-start px-1 space-y-3 lg:space-y-0 lg:space-x-4">
                   <RadioButton  day='On-Going' 
                                 name="status"
                                 className="hover:border-cyan-500 active:text-cyan-400"
@@ -182,7 +182,7 @@ const App = () => {
                                 onClick={() => {changePopUp('status', 'Finished')}}/>
                 </div>
                 <label htmlFor="" className={(itemPopUp.status === "On-Going" ? "" : "hidden ")+"font-medium"}>Day Update</label>
-                <div className={(itemPopUp.status === "On-Going" ? "" : "hidden ")+"flex flex-col lg:flex-row justify-start px-1 space-x-4"}>
+                <div className={(itemPopUp.status === "On-Going" ? "" : "hidden ")+"flex flex-col lg:flex-row justify-start px-1 space-y-3 lg:space-y-0 space-x-4"}>
                   <RadioButton  day='Monday' 
                                 name="day"
                                 className="hover:border-blue-500 active:text-blue-400"
