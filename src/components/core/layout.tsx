@@ -15,7 +15,7 @@ export const Layout:React.FC = ({ children }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header data={user}/>
-            <main className="flex flex-1 flex-col mx-2 lg:mx-40 my-24 justify-center items-center">
+            <main className="flex flex-1 flex-col mx-2 lg:mx-40 my-12 justify-center items-center">
                 {children}
             </main>
             <Footer/>

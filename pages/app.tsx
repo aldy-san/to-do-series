@@ -102,22 +102,22 @@ const App = () => {
         {/* <div className="fixed top-0 left-0 w-full flex justify-center mt-4">
           <p className="text-lg bg-green-100 border-2 border-green-400 rounded-lg text-green-500 px-4 py-2 font-normal">Your Data is <span className="text-green-700 font-bold">saved</span></p>
         </div> */}
-        <div className="flex space-x-4 items-center mx-2 max-w-2xl">
-          <div className="flex flex-col w-4/6 space-y-2">
+        <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 justify-center px-4 mx-2 w-full">
+          <div className="flex flex-col space-y-2 w-11/12">
             <label htmlFor="addTitle" className="font-medium">Title</label>
             <Input  value={title}
                     type="text"
                     placeholder="Type the title"
                     onChange={(e) => {setTitle(e.target.value)}}/>
           </div>
-          <div className="flex flex-col w-1/6 space-y-2">
+          <div className="flex flex-col space-y-2 w-1/12">
             <label htmlFor="addEpisode" className="font-medium">Episodes</label>
             <Input  value={episode}
                     type="number"
                     placeholder="Eps"
                     onChange={(e) => {setEpisode(Number(e.target.value))}}/>
           </div>
-          <Button text="Add" className="bg-gray-800 mt-auto 1/6" onClick={()=> {addItem()}}/>
+          <Button text="Add" className="bg-gray-800" onClick={()=> {addItem()}}/>
         </div>
         {/* LIST ITEM */}
         <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full">
@@ -174,15 +174,15 @@ const App = () => {
                                 activeClassName='bg-yellow-500 border-yellow-500' 
                                 active={itemPopUp.status} 
                                 onClick={() => {changePopUp('status', 'On-Hold')}}/>
-                  <RadioButton  day='Completed' 
+                  <RadioButton  day='Finished' 
                                 name="status"
                                 className="hover:border-green-500 active:text-green-400"
                                 activeClassName='bg-green-500 border-green-500' 
                                 active={itemPopUp.status} 
-                                onClick={() => {changePopUp('status', 'Completed')}}/>
+                                onClick={() => {changePopUp('status', 'Finished')}}/>
                 </div>
-                <label htmlFor="" className="font-medium">Day Update</label>
-                <div className="flex justify-start px-1 space-x-4">
+                <label htmlFor="" className={(itemPopUp.status === "On-Going" ? "" : "hidden ")+"font-medium"}>Day Update</label>
+                <div className={(itemPopUp.status === "On-Going" ? "" : "hidden ")+"flex justify-start px-1 space-x-4"}>
                   <RadioButton  day='Monday' 
                                 name="day"
                                 className="hover:border-blue-500 active:text-blue-400"
