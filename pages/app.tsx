@@ -103,14 +103,14 @@ const App = () => {
           <p className="text-lg bg-green-100 border-2 border-green-400 rounded-lg text-green-500 px-4 py-2 font-normal">Your Data is <span className="text-green-700 font-bold">saved</span></p>
         </div> */}
         <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 justify-center px-4 mx-2 w-full">
-          <div className="flex flex-col space-y-2 w-11/12">
+          <div className="flex flex-col space-y-2 lg:w-11/12">
             <label htmlFor="addTitle" className="font-medium">Title</label>
             <Input  value={title}
                     type="text"
                     placeholder="Type the title"
                     onChange={(e) => {setTitle(e.target.value)}}/>
           </div>
-          <div className="flex flex-col space-y-2 w-1/12">
+          <div className="flex flex-col space-y-2 lg:w-1/12">
             <label htmlFor="addEpisode" className="font-medium">Episodes</label>
             <Input  value={episode}
                     type="number"
@@ -161,7 +161,7 @@ const App = () => {
                   </div>
                 </div>
                 <label htmlFor="" className="font-medium">Status</label>
-                <div className="flex justify-start px-1 space-x-4">
+                <div className="flex flex-col lg:flex-row justify-start px-1 space-x-4">
                   <RadioButton  day='On-Going' 
                                 name="status"
                                 className="hover:border-cyan-500 active:text-cyan-400"
@@ -182,7 +182,7 @@ const App = () => {
                                 onClick={() => {changePopUp('status', 'Finished')}}/>
                 </div>
                 <label htmlFor="" className={(itemPopUp.status === "On-Going" ? "" : "hidden ")+"font-medium"}>Day Update</label>
-                <div className={(itemPopUp.status === "On-Going" ? "" : "hidden ")+"flex justify-start px-1 space-x-4"}>
+                <div className={(itemPopUp.status === "On-Going" ? "" : "hidden ")+"flex flex-col lg:flex-row justify-start px-1 space-x-4"}>
                   <RadioButton  day='Monday' 
                                 name="day"
                                 className="hover:border-blue-500 active:text-blue-400"
