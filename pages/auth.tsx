@@ -1,3 +1,4 @@
+import { NextPage } from 'next';
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { Layout } from '../src/components/core/layout';
@@ -7,8 +8,7 @@ const uiConfig = {
     signInSuccessUrl: "/app",
     signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
 }
-
-export default function SignInScreen(){
+const SignInScreen: NextPage = () =>{
     return(
         <WithoutAuth>
             <Layout>
@@ -21,3 +21,5 @@ export default function SignInScreen(){
         </WithoutAuth>
     )
 }
+
+export default SignInScreen;

@@ -1,4 +1,5 @@
 import { doc, deleteDoc, updateDoc } from "firebase/firestore"
+import { useState } from "react"
 import {db} from '../firebase/clientApp'
 import Button from "./button"
 
@@ -19,6 +20,7 @@ type item = {
 }
 
 export default function SeriesItem(data:item){
+    const [isLoading, setIsLoading] = useState(false);
     async function DeleteItem(itemId:string){
         await deleteDoc(doc(db, "series", itemId))
         data.getItem()
@@ -27,6 +29,7 @@ export default function SeriesItem(data:item){
         data.setItemPopUp(data.data)
     }
     async function UpdateEpisode(itemId: string, currentEpisode: number, maxEpisode: number){
+        setIsLoading(true);
         if (currentEpisode == maxEpisode){
             await updateDoc(doc(db, "series", itemId), {
                 isCompleted: true
@@ -37,6 +40,7 @@ export default function SeriesItem(data:item){
             })
         }
         data.getItem()
+        setIsLoading(false);
     }
 
     return (
@@ -57,7 +61,8 @@ export default function SeriesItem(data:item){
                     <Button text={(data.data.currentEpisode == data.data.maxEpisode) ? "Complete" : "Next"}
                             className="bg-green-600 flex-1 mt-auto" 
                             onClick={() => { UpdateEpisode(data.data.itemId, data.data.currentEpisode, data.data.maxEpisode) }}
-                            disabled={data.data.isCompleted}/>
+                            disabled={data.data.isCompleted || isLoading}
+                            isLoading={isLoading}/>
                 </div>
             </div>
             

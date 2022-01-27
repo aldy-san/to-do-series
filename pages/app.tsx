@@ -8,6 +8,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import RadioButton from '../src/components/radio-button'
 import Button from '../src/components/button'
 import Input from '../src/components/input'
+import { NextPage } from 'next'
 
 interface itemSeries {
   itemId: string,
@@ -18,8 +19,10 @@ interface itemSeries {
   dayUpdate?: string,
   isCompleted: boolean
 }
-
-const App = () => {
+// export async function getStaticProps (){
+  
+// }
+const App:NextPage = () => {
   const itemDefault: itemSeries = {
     itemId: '',
     title: '',
@@ -44,6 +47,7 @@ const App = () => {
     }
     return 0;
   }
+
   async function getItem() {
     firebase.auth().onAuthStateChanged(async function(user) {
       if (user) {
@@ -56,7 +60,6 @@ const App = () => {
           tempData["itemId"] = doc.id;
           tempSeries.push(tempData);
         });
-        
         tempSeries.sort( compare );
         setSeries(tempSeries)
       }
@@ -64,7 +67,7 @@ const App = () => {
   }
   useEffect(() => {
     getItem()
-  }, []) 
+  },[]) // eslint-disable-line react-hooks/exhaustive-deps
   function setPopUp(data: any){
     setItemPopUp( data )
   }
@@ -99,9 +102,6 @@ const App = () => {
     <WithAuth>
       <Layout>
         {/* ADD ITEM */}
-        {/* <div className="fixed top-0 left-0 w-full flex justify-center mt-4">
-          <p className="text-lg bg-green-100 border-2 border-green-400 rounded-lg text-green-500 px-4 py-2 font-normal">Your Data is <span className="text-green-700 font-bold">saved</span></p>
-        </div> */}
         <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 justify-center px-4 mx-2 w-full">
           <div className="flex flex-col space-y-2 lg:w-11/12">
             <label htmlFor="addTitle" className="font-medium">Title</label>
@@ -120,7 +120,7 @@ const App = () => {
           <Button text="Add" className="bg-gray-800" onClick={()=> {addItem()}}/>
         </div>
         {/* LIST ITEM */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full w-full ">
           {
             series.map((item, idx)=>{
               return (
