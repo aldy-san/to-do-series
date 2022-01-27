@@ -2,6 +2,7 @@ import { doc, deleteDoc, updateDoc } from "firebase/firestore"
 import { useState } from "react"
 import {db} from '../firebase/clientApp'
 import Button from "./button"
+import {toast} from "./toast";
 
 type items = {
     itemId: string,
@@ -41,6 +42,7 @@ export default function SeriesItem(data:item){
         }
         data.getItem()
         setIsLoading(false);
+        toast.notify("saved")
     }
 
     return (

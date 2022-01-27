@@ -4,7 +4,6 @@ import Footer from "./footer"
 import Head from "next/head";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase/clientApp";
-import Toast from "../toast";
 export const Layout:React.FC = ({ children }) => {
     const [user] = useAuthState(auth)
     
