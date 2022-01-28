@@ -1,17 +1,49 @@
 // @ts-ignore
 import ReactDOM from 'react-dom';
 import { NextPage } from "next";
+import { useEffect, useState } from 'react';
 
 interface Props {
     message: String;
-    className?: String;
+    type: String;
 } 
+const checkIcon =   <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 rounded-full border-2 border-white px-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
+                    </svg>
+const refreshIcon =   <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 rounded-full border-2 border-white px-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" />
+                    </svg>
+const trashIcon =   <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 rounded-full border-2 border-white px-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"/>
+                    </svg>
 const Toast: NextPage<Props> = (props) => {
+    const [color, setColor] = useState("bg-gray-500 border-gray-600");
+    const [icon, setIcon] = useState(checkIcon);
+    const SwitchType = (type: String) =>{
+        switch(type){
+            case 'success':
+                setColor("bg-green-500 border-green-600");
+                break;
+            case 'warning':
+                setColor("bg-yellow-500 border-yellow-600");
+                setIcon(refreshIcon)
+                break;
+            case 'danger':
+                setColor("bg-red-500 border-red-600")
+                setIcon(trashIcon)
+                break;
+            default:
+                setColor("bg-gray-500 border-gray-500")
+                break;
+        }
+    }
+    useEffect(() => {
+      SwitchType(props.type);
+    }, [props]);
+    
     return(
-        <div className={"flex justify-start rounded-md text-white px-8 py-4 items-center space-x-3 border-b-4 " + props.className}>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 rounded-full border-2 border-white px-1" viewBox="0 0 20 20" fill="currentColor">
-                <path  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
-            </svg>
+        <div className={color + " flex justify-start rounded-md text-white px-8 py-4 items-center space-x-3 border-b-4"}>
+            {icon}
             <p className="text-lg font-medium">{props.message}</p>
         </div>
     )
@@ -33,13 +65,13 @@ export const toast:ToastProps = {
     },
     currentToast: false,
     timeout: null,
-    notify: (message, className) => {
+    notify: (message, type) => {
         let duration = 2;
         if (toast.currentToast) {
             toast.remove()
         }
 
-        ReactDOM.render(<Toast message={message} className={className}/>, document.getElementById('toast-container'))
+        ReactDOM.render(<Toast message={message} type={type}/>, document.getElementById('toast-container'))
         toast.currentToast = true;
         toast.timeout = setTimeout(toast.remove, duration*1000)
     }

@@ -2,7 +2,7 @@ import firebase, {auth,db} from '../src/firebase/clientApp'
 import { Layout } from '../src/components/core/layout'
 import { WithAuth } from '../src/components/core/with-auth'
 import SeriesItem from '../src/components/series-item'
-import { collection, doc, addDoc, getDocs, query, where, setDoc } from "firebase/firestore"
+import { collection, doc, addDoc, getDocs, query, where, setDoc, orderBy } from "firebase/firestore"
 import { useEffect, useState } from 'react'
 import { useAuthState } from "react-firebase-hooks/auth";
 import RadioButton from '../src/components/radio-button'
@@ -34,6 +34,7 @@ const App:NextPage = () => {
   }
   //list of series
   const [series, setSeries] = useState([])
+  const [filteredSeries, setFilteredSeries] = useState([]);
   const [title, setTitle] = useState("")
   const [episode, setEpisode] = useState(1)
   const [itemPopUp, setItemPopUp] = useState<itemSeries>(itemDefault)
@@ -53,7 +54,6 @@ const App:NextPage = () => {
     firebase.auth().onAuthStateChanged(async function(user) {
       if (user) {
         const q = query(collection(db, "series"), where("uid", "==", user?.uid))
-        console.log(user?.uid);
         const getSeries = await getDocs(q);
         let tempSeries = [] as any
         getSeries.forEach((doc) => {
@@ -61,6 +61,7 @@ const App:NextPage = () => {
           tempData["itemId"] = doc.id;
           tempSeries.push(tempData);
         });
+        console.log(tempSeries);
         tempSeries.sort( compare );
         setSeries(tempSeries)
       }
@@ -81,7 +82,7 @@ const App:NextPage = () => {
   async function addItem() {
     const temp = {
       uid: user?.uid,
-      title:title, 
+      title:title,
       maxEpisode: episode,
       currentEpisode: 1,
       dayUpdate: "",
@@ -92,21 +93,21 @@ const App:NextPage = () => {
     getItem()
     setTitle("")
     setEpisode(1)
-    toast.notify("Added", "bg-green-500 border-green-600")
+    toast.notify("Added", "success")
   }
 
   async function updateItem() {
       const docRef = doc(db, "series", itemPopUp.itemId);
       await setDoc(docRef,itemPopUp);
       getItem();
-      toast.notify("Updated", "bg-yellow-500 border-yellow-600")
+      toast.notify("Updated", "success")
   }
 
   return (
     <WithAuth>
       <Layout>
         {/* ADD ITEM */}
-        <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 justify-center px-4 mx-2 w-full">
+        <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 justify-center mx-2 w-full">
           <div className="flex flex-col space-y-2 lg:w-11/12">
             <label htmlFor="addTitle" className="font-medium">Title</label>
             <Input  value={title}
@@ -122,6 +123,10 @@ const App:NextPage = () => {
                     onChange={(e) => {setEpisode(Number(e.target.value))}}/>
           </div>
           <Button text="Add" className="bg-gray-800" onClick={()=> {addItem()}}/>
+        </div>
+        {/* FILTER */}
+        <div>
+
         </div>
         {/* LIST ITEM */}
         <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full w-full ">

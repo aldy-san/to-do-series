@@ -7,11 +7,11 @@ interface Props {
     isLoading?: boolean;
 }
 const Button: NextPage<Props> = (Props) =>{
-    return  <button className={(Props.className ? Props.className : "") + " flex justify-center px-4 py-2 rounded-lg font-bold text-white hover:brightness-125 active:scale-95 transition-transform duration-100"}
+    return  <button className={(Props.className ? Props.className : "") + (!Props.disabled ? " hover:brightness-125 active:scale-95" : " hover:cursor-not-allowed") + " flex justify-center px-4 py-2 rounded-lg font-bold text-white transition-transform duration-100"}
                     onClick={Props.onClick}
                     disabled={Props.disabled}>
                         <div className={(Props.isLoading ? "block" : "hidden")+" animate-pulse h-4 w-4 bg-white rounded-full my-1"}></div>
-                        <span className={(!Props.isLoading ? "block" : "hidden")}>{!Props.isLoading ? Props.text : ""}</span>
+                        <span className={(!Props.isLoading ? "block my-auto" : "hidden")}>{!Props.isLoading ? Props.text : ""}</span>
                     </button>
 }
 

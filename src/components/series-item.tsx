@@ -25,12 +25,12 @@ export default function SeriesItem(data:item){
     async function DeleteItem(itemId:string){
         await deleteDoc(doc(db, "series", itemId))
         data.getItem()
-        toast.notify("Deleted", "bg-red-500 border-red-600")
+        toast.notify("Deleted", "danger")
     }
     async function EditItem(){
         data.setItemPopUp(data.data)
     }
-    async function UpdateEpisode(itemId: string, currentEpisode: number, maxEpisode: number){
+    async function UpdateEpisode(itemId: string, title: string, currentEpisode: number, maxEpisode: number){
         setIsLoading(true);
         if (currentEpisode == maxEpisode){
             await updateDoc(doc(db, "series", itemId), {
@@ -43,13 +43,13 @@ export default function SeriesItem(data:item){
         }
         data.getItem()
         setIsLoading(false);
-        toast.notify("Saved", "bg-green-500 border-green-600")
+        toast.notify("Saved", "success")
     }
 
     return (
         <>
             <div className="flex flex-col col-span-1 p-4 shadow-md rounded-lg space-y-3 max-h-min">
-                <span className="w-20 h-20 rounded-full bg-gray-200"></span>
+                {/* <span className="w-20 h-20 rounded-full bg-gray-200"></span> */}
                 <span className="font-bold text-xl">{data.data.title}</span>
                 <span className="text-lg mt-auto">Episode: <span className="font-bold">{data.data.currentEpisode}</span> / {data.data.maxEpisode}</span>
                 <span className={(data.data.status ? "" : "hidden ")+"text-lg mt-auto"}>Airing Status: <span className="font-bold text-green-600">{data.data.status}</span></span>
@@ -63,7 +63,7 @@ export default function SeriesItem(data:item){
                             onClick={() => { EditItem() }}/>
                     <Button text={(data.data.currentEpisode == data.data.maxEpisode) ? "Complete" : "Next"}
                             className="bg-green-600 flex-1 mt-auto" 
-                            onClick={() => { UpdateEpisode(data.data.itemId, data.data.currentEpisode, data.data.maxEpisode) }}
+                            onClick={() => { UpdateEpisode(data.data.itemId, data.data.title, data.data.currentEpisode, data.data.maxEpisode) }}
                             disabled={data.data.isCompleted || isLoading}
                             isLoading={isLoading}/>
                 </div>
