@@ -18,7 +18,7 @@ export const Layout:React.FC = ({ children }) => {
                 {/* <Toast/> */}
             </div>
             <Header data={user}/>
-            <main className="flex flex-1 flex-col mx-2 lg:mx-40 my-12 justify-center items-center">
+            <main className="flex flex-col mx-2 lg:mx-40 mt-12 justify-center items-center mb-auto">
                 {children}
             </main>
             <Footer/>

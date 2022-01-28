@@ -9,6 +9,7 @@ import RadioButton from '../src/components/radio-button'
 import Button from '../src/components/button'
 import Input from '../src/components/input'
 import { NextPage } from 'next'
+import {toast} from "../src/components/toast";
 
 interface itemSeries {
   itemId: string,
@@ -91,11 +92,14 @@ const App:NextPage = () => {
     getItem()
     setTitle("")
     setEpisode(1)
+    toast.notify("Added", "bg-green-500 border-green-600")
   }
 
   async function updateItem() {
       const docRef = doc(db, "series", itemPopUp.itemId);
       await setDoc(docRef,itemPopUp);
+      getItem();
+      toast.notify("Updated", "bg-yellow-500 border-yellow-600")
   }
 
   return (
@@ -227,7 +231,7 @@ const App:NextPage = () => {
                                 onClick={() => {changePopUp('dayUpdate', 'Sunday')}}/>
                 </div>
                 <div className="flex space-x-3 justify-end py-4">
-                  <Button text="Close" className="bg-red-500" onClick={() => {setItemPopUp(itemDefault); getItem()}}/>
+                  <Button text="Close" className="bg-red-500" onClick={() => {setItemPopUp(itemDefault)}}/>
                   <Button text="Save" className="bg-green-500" onClick={() => {updateItem()}}/>
                 </div>
             </div>

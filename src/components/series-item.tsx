@@ -25,6 +25,7 @@ export default function SeriesItem(data:item){
     async function DeleteItem(itemId:string){
         await deleteDoc(doc(db, "series", itemId))
         data.getItem()
+        toast.notify("Deleted", "bg-red-500 border-red-600")
     }
     async function EditItem(){
         data.setItemPopUp(data.data)
@@ -42,7 +43,7 @@ export default function SeriesItem(data:item){
         }
         data.getItem()
         setIsLoading(false);
-        toast.notify("saved")
+        toast.notify("Saved", "bg-green-500 border-green-600")
     }
 
     return (
