@@ -82,7 +82,7 @@ const App:NextPage = () => {
   async function addItem() {
     const temp = {
       uid: user?.uid,
-      title:title,
+      title:title.charAt(0).toUpperCase() + title.slice(1),
       maxEpisode: episode,
       currentEpisode: 1,
       dayUpdate: "",
