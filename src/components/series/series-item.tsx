@@ -1,8 +1,8 @@
 import { doc, deleteDoc, updateDoc } from "firebase/firestore"
 import { useState } from "react"
-import {db} from '../firebase/clientApp'
-import Button from "./button"
-import {toast} from "./toast";
+import {db} from '../../firebase/clientApp'
+import Button from "../button"
+import {toast} from "../toast";
 
 type items = {
     itemId: string,
@@ -23,9 +23,10 @@ type item = {
 export default function SeriesItem(data:item){
     const [isLoading, setIsLoading] = useState(false);
     async function DeleteItem(itemId:string){
-        await deleteDoc(doc(db, "series", itemId))
-        data.getItem()
-        toast.notify("Deleted", "danger")
+        await deleteDoc(doc(db, "series", itemId)).then(() => {
+            data.getItem()
+            toast.notify("Deleted", "danger")
+        })
     }
     async function EditItem(){
         data.setItemPopUp(data.data)
@@ -35,15 +36,19 @@ export default function SeriesItem(data:item){
         if (currentEpisode == maxEpisode){
             await updateDoc(doc(db, "series", itemId), {
                 isCompleted: true
+            }).then(() => {
+                data.getItem()
+                toast.notify("Saved", "success")
             })
         } else {
             await updateDoc(doc(db, "series", itemId), {
                 currentEpisode: currentEpisode + 1
+            }).then(() => {
+                data.getItem()
+                toast.notify("Saved", "success")
             })
         }
-        data.getItem()
         setIsLoading(false);
-        toast.notify("Saved", "success")
     }
 
     return (
@@ -55,20 +60,19 @@ export default function SeriesItem(data:item){
                 <span className={(data.data.status ? "" : "hidden ")+"text-lg mt-auto"}>Airing Status: <span className="font-bold text-green-600">{data.data.status}</span></span>
                 <span className={((data.data.dayUpdate != "") && (data.data.status === "On-Going") ? "" : "hidden ") + "text-lg"}>Next episode release on <span className="font-bold">{data.data.dayUpdate}</span></span>
                 <div className="flex w-full space-x-2 grow">
-                    <Button text="Delete" 
-                            className="bg-red-600 flex-1 mt-auto" 
+                    <Button text="Delete"
+                            className="bg-red-600 flex-1 mt-auto"
                             onClick={() => { DeleteItem(data.data.itemId) }}/>
-                    <Button text="Edit" 
-                            className="bg-yellow-500 flex-1 mt-auto" 
+                    <Button text="Edit"
+                            className="bg-yellow-500 flex-1 mt-auto"
                             onClick={() => { EditItem() }}/>
                     <Button text={(data.data.currentEpisode == data.data.maxEpisode) ? "Complete" : "Next"}
-                            className="bg-green-600 flex-1 mt-auto" 
+                            className="bg-green-600 flex-1 mt-auto"
                             onClick={() => { UpdateEpisode(data.data.itemId, data.data.title, data.data.currentEpisode, data.data.maxEpisode) }}
                             disabled={data.data.isCompleted || isLoading}
                             isLoading={isLoading}/>
                 </div>
             </div>
-            
         </>
     )
 }

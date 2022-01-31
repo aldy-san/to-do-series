@@ -1,7 +1,7 @@
 import firebase, {auth,db} from '../src/firebase/clientApp'
 import { Layout } from '../src/components/core/layout'
 import { WithAuth } from '../src/components/core/with-auth'
-import SeriesItem from '../src/components/series-item'
+import SeriesList from '../src/components/series/series-list'
 import { collection, doc, addDoc, getDocs, query, where, setDoc, orderBy } from "firebase/firestore"
 import { useEffect, useState } from 'react'
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -34,7 +34,7 @@ const App:NextPage = () => {
   }
   //list of series
   const [series, setSeries] = useState([])
-  const [filteredSeries, setFilteredSeries] = useState([]);
+  // const [filteredSeries, setFilteredSeries] = useState([]);
   const [title, setTitle] = useState("")
   const [episode, setEpisode] = useState(1)
   const [itemPopUp, setItemPopUp] = useState<itemSeries>(itemDefault)
@@ -61,7 +61,7 @@ const App:NextPage = () => {
           tempData["itemId"] = doc.id;
           tempSeries.push(tempData);
         });
-        console.log(tempSeries);
+        // console.log(tempSeries);
         tempSeries.sort( compare );
         setSeries(tempSeries)
       }
@@ -89,25 +89,31 @@ const App:NextPage = () => {
       status: "",
       isCompleted: false
     }
-    await addDoc(collection(db, "series"),temp)
-    getItem()
-    setTitle("")
-    setEpisode(1)
-    toast.notify("Added", "success")
+    if (title == ""){
+      toast.notify("This field is required", "danger")
+    } else {
+      await addDoc(collection(db, "series"),temp).then(() => {
+        getItem()
+        toast.notify("Added", "success")
+      })
+      setTitle("")
+      setEpisode(1)
+    }
   }
 
   async function updateItem() {
       const docRef = doc(db, "series", itemPopUp.itemId);
-      await setDoc(docRef,itemPopUp);
-      getItem();
-      toast.notify("Updated", "success")
+      await setDoc(docRef,itemPopUp).then(() => {
+        getItem();
+        toast.notify("Updated", "success")
+      });
   }
 
   return (
     <WithAuth>
       <Layout>
         {/* ADD ITEM */}
-        <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 justify-center mx-2 w-full">
+        <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4 justify-center w-full">
           <div className="flex flex-col space-y-2 lg:w-11/12">
             <label htmlFor="addTitle" className="font-medium">Title</label>
             <Input  value={title}
@@ -125,11 +131,12 @@ const App:NextPage = () => {
           <Button text="Add" className="bg-gray-800" onClick={()=> {addItem()}}/>
         </div>
         {/* FILTER */}
-        <div>
-
-        </div>
+        {/* <div className="flex">
+          
+        </div> */}
         {/* LIST ITEM */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full w-full ">
+        <SeriesList data={series} getItem={getItem} setPopUp={setPopUp}/>
+        {/* <div className="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4 min-h-full w-full ">
           {
             series.map((item, idx)=>{
               return (
@@ -137,7 +144,7 @@ const App:NextPage = () => {
               )
             })
           }
-        </div>
+        </div> */}
         {/* EDIT POP UP */}
         <div  className={(itemPopUp.itemId ? "flex" : "hidden") + " fixed flex top-0 left-0 w-screen h-screen bg-gray-400 bg-opacity-20 z-10 items-center px-2"}>
             <div className="flex-1 flex flex-col bg-gray-100 shadow-lg lg:mx-96 rounded-lg space-y-4 p-4">
