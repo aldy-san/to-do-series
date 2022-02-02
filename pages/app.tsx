@@ -147,7 +147,7 @@ const App:NextPage = () => {
         </div> */}
         {/* EDIT POP UP */}
         <div  className={(itemPopUp.itemId ? "flex" : "hidden") + " fixed flex top-0 left-0 w-screen h-screen bg-gray-400 bg-opacity-20 z-10 items-center px-2"}>
-            <div className="flex-1 flex flex-col bg-gray-100 shadow-lg lg:mx-96 rounded-lg space-y-4 p-4">
+            <div className="flex-1 flex flex-col bg-gray-100 shadow-lg lg:mx-96 rounded-lg space-y-4 p-4 max-h-96 lg:max-h-max overflow-y-auto overflow-x-hidden">
                 <span className="text-2xl font-bold">{itemPopUp ? itemPopUp.title : ""}</span>
                 <label htmlFor="title" className="font-medium">Title</label>
                 <Input  value={itemPopUp ? itemPopUp.title : ""}
