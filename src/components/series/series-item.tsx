@@ -57,7 +57,9 @@ export default function SeriesItem(data:item){
     return (
         <>
             <div className="flex flex-col col-span-1 p-4 shadow-md rounded-lg space-y-3 max-h-min">
-                {/* <span className="w-20 h-20 rounded-full bg-gray-200"></span> */}
+                <div className="relative w-full h-4 rounded-full bg-gray-200">
+                    <div className="h-full bg-green-400 rounded-full" style={{width:((data.data.currentEpisode/data.data.maxEpisode)*100)+"%"}}></div>
+                </div>
                 <span className="font-bold text-xl">{data.data.title}</span>
                 <span className="text-lg mt-auto">Episode: <span className="font-bold">{data.data.currentEpisode}</span> / {data.data.maxEpisode}</span>
                 <span className={(data.data.status ? "" : "hidden ")+"text-lg mt-auto"}>Airing Status: <span className="font-bold text-green-600">{data.data.status}</span></span>
