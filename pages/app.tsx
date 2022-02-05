@@ -163,7 +163,7 @@ const App:NextPage = () => {
                             type="number"
                             placeholder="Current"
                             id="current"
-                            onChange={(e) => {changePopUp('currentEpisode', e.target.value)}}/>
+                            onChange={(e) => {changePopUp('currentEpisode', parseInt(e.target.value))}}/>
                   </div>
                   <span className="text-4xl mt-auto mb-1">/</span>
                   <div className="flex flex-col space-y-2">
@@ -173,7 +173,7 @@ const App:NextPage = () => {
                             type="number"
                             placeholder="Max"
                             id="max"
-                            onChange={(e) => {changePopUp('maxEpisode', e.target.value)}}/>
+                            onChange={(e) => {changePopUp('maxEpisode', parseInt(e.target.value))}}/>
                   </div>
                 </div>
                 <label htmlFor="" className="font-medium">Status</label>
