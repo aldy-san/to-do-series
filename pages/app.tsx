@@ -97,6 +97,7 @@ const App: NextPage = () => {
         setSeries(tempSeries);
       }
     });
+    setTitle("");
   }
 
   function setPopUp(data: any) {
