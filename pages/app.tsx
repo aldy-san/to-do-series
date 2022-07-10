@@ -56,7 +56,7 @@ const App: NextPage = () => {
     if (val === "") setSeries(tempSeries);
     else {
       const filtered = tempSeries.filter((item) => {
-        console.log(item.title, val, "==>", item.title.includes(val));
+        //console.log(item.title, val, "==>", item.title.includes(val));
         return item.title.toLowerCase().includes(val);
       });
       setSeries(filtered);
