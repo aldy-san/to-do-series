@@ -3,12 +3,15 @@ import Image from "next/image";
 import SeriesItem from "./series-item";
 interface Props {
   data: Array<any>;
+  isLoading: Boolean;
   getItem: () => void;
   setPopUp: (data: any) => void;
 }
 
 const SeriesList: NextPage<Props> = (Props) => {
-  if (Props.data.length == 0) {
+  if (Props.isLoading) {
+    return <p>Loading</p>;
+  } else if (Props.data.length == 0) {
     return (
       <div className="flex flex-col justify-center py-20 space-y-16">
         <Image src="/no-data.svg" alt="" width={300} height={300} />

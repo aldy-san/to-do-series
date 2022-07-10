@@ -46,6 +46,7 @@ const App: NextPage = () => {
   const [title, setTitle] = useState("");
   const [itemPopUp, setItemPopUp] = useState<itemSeries>(itemDefault);
   const [user] = useAuthState(auth);
+  const [isLoading, setIsloading] = useState(false);
 
   useEffect(() => {
     getItem();
@@ -53,11 +54,10 @@ const App: NextPage = () => {
 
   const search = (val: string) => {
     if (val === "") setSeries(tempSeries);
-    if (title === "") setTempSeries(series);
     else {
       const filtered = tempSeries.filter((item) => {
-        console.log(item.title, title, "==>", item.title.includes(title));
-        return item.title.toLowerCase().includes(title);
+        console.log(item.title, val, "==>", item.title.includes(val));
+        return item.title.toLowerCase().includes(val);
       });
       setSeries(filtered);
     }
@@ -79,6 +79,7 @@ const App: NextPage = () => {
   }
 
   async function getItem() {
+    setIsloading(true);
     firebase.auth().onAuthStateChanged(async function (user) {
       if (user) {
         const q = query(
@@ -95,6 +96,8 @@ const App: NextPage = () => {
         // console.log(tempSeries);
         tempSeries.sort(compare);
         setSeries(tempSeries);
+        setTempSeries(tempSeries);
+        setIsloading(false);
       }
     });
     setTitle("");
@@ -170,11 +173,16 @@ const App: NextPage = () => {
           />
         </div>
         <div className="flex flex-col space-y-1 mt-4">
-          <p>Search :{title ? title : ""}</p>
+          <p>{title ? "Search: " + title : ""}</p>
           <p>Found {series.length} data</p>
         </div>
         {/* LIST ITEM */}
-        <SeriesList data={series} getItem={getItem} setPopUp={setPopUp} />
+        <SeriesList
+          data={series}
+          getItem={getItem}
+          setPopUp={setPopUp}
+          isLoading={isLoading}
+        />
         {/* EDIT POP UP */}
         <div
           className={
