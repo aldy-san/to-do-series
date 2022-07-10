@@ -22,7 +22,7 @@ import { toast } from "../src/components/toast";
 interface itemSeries {
   itemId: string;
   title: string;
-  maxEpisode: number;
+  maxEpisode: any;
   currentEpisode: number;
   status?: string;
   dayUpdate?: string;
@@ -51,10 +51,14 @@ const App: NextPage = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function compare(a: any, b: any) {
-    if (a.title < b.title) {
+    let A = a.currentEpisode / a.maxEpisode;
+    let B = b.currentEpisode / b.maxEpisode;
+    if (a.maxEpisode === null) A = 0;
+    if (b.maxEpisode === null) B = 0;
+    if (A < B) {
       return -1;
     }
-    if (a.title > b.title) {
+    if (A > B) {
       return 1;
     }
     return 0;
@@ -115,8 +119,12 @@ const App: NextPage = () => {
   }
 
   async function updateItem() {
-    const docRef = doc(db, "series", itemPopUp.itemId);
-    await setDoc(docRef, itemPopUp).then(async () => {
+    const payload = { ...itemPopUp };
+    if (payload.maxEpisode === 0 || payload.maxEpisode === null) {
+      payload.maxEpisode = null;
+    }
+    const docRef = doc(db, "series", payload.itemId);
+    await setDoc(docRef, payload).then(async () => {
       await getItem().then(() => {
         toast.notify("Updated", "success");
       });

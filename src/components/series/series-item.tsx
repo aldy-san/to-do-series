@@ -118,7 +118,10 @@ export default function SeriesItem(data: item) {
                 ? "Complete"
                 : "Next"
             }
-            className="bg-green-600 flex-1 mt-auto"
+            className={
+              (data.data.isCompleted ? "bg-green-400 " : "bg-green-600 ") +
+              " flex-1 mt-auto"
+            }
             onClick={() => {
               UpdateEpisode(
                 data.data.itemId,
