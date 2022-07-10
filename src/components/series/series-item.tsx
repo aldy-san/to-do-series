@@ -119,7 +119,7 @@ export default function SeriesItem(data: item) {
                 : "Next"
             }
             className={
-              (data.data.isCompleted ? "bg-green-400 " : "bg-green-600 ") +
+              (data.data.isCompleted ? "bg-green-900 " : "bg-green-600 ") +
               " flex-1 mt-auto"
             }
             onClick={() => {
