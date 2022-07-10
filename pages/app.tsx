@@ -41,7 +41,8 @@ const App: NextPage = () => {
     isCompleted: false,
   };
   //list of series
-  const [series, setSeries] = useState([]);
+  const [series, setSeries] = useState<itemSeries[]>([]);
+  const [tempSeries, setTempSeries] = useState<itemSeries[]>([]);
   const [title, setTitle] = useState("");
   const [itemPopUp, setItemPopUp] = useState<itemSeries>(itemDefault);
   const [user] = useAuthState(auth);
@@ -49,6 +50,19 @@ const App: NextPage = () => {
   useEffect(() => {
     getItem();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const search = (val: string) => {
+    if (val === "") setSeries(tempSeries);
+    if (title === "") setTempSeries(series);
+    else {
+      const filtered = tempSeries.filter((item) => {
+        console.log(item.title, title, "==>", item.title.includes(title));
+        return item.title.toLowerCase().includes(title);
+      });
+      setSeries(filtered);
+    }
+    setTitle(val);
+  };
 
   function compare(a: any, b: any) {
     let A = a.currentEpisode / a.maxEpisode;
@@ -142,7 +156,7 @@ const App: NextPage = () => {
               type="text"
               placeholder="Search or add item"
               onChange={(e) => {
-                setTitle(e.target.value);
+                search(e.target.value);
               }}
             />
           </div>
@@ -153,6 +167,10 @@ const App: NextPage = () => {
               addItem();
             }}
           />
+        </div>
+        <div className="flex flex-col space-y-1 mt-4">
+          <p>Search :{title ? title : ""}</p>
+          <p>Found {series.length} data</p>
         </div>
         {/* LIST ITEM */}
         <SeriesList data={series} getItem={getItem} setPopUp={setPopUp} />

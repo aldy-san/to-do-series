@@ -19,7 +19,7 @@ const SeriesList: NextPage<Props> = (Props) => {
     );
   }
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-8 lg:mt-16 gap-4 min-h-full w-full ">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-8 lg:mt-10 gap-4 min-h-full w-full ">
       {Props.data.map((item, idx) => {
         return (
           <SeriesItem
