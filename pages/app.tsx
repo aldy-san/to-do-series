@@ -52,7 +52,7 @@ const App: NextPage = () => {
     getItem();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const search = (val: string) => {
+  function search(val: string) {
     if (val === "") setSeries(tempSeries);
     else {
       const filtered = tempSeries.filter((item) => {
@@ -60,9 +60,12 @@ const App: NextPage = () => {
         return item.title.toLowerCase().includes(val);
       });
       setSeries(filtered);
+      console.log(tempSeries);
+      console.log(series);
+      console.log(filtered);
     }
     setTitle(val);
-  };
+  }
 
   function compare(a: any, b: any) {
     let A = a.currentEpisode / a.maxEpisode;
