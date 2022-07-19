@@ -51,21 +51,21 @@ const App: NextPage = () => {
   useEffect(() => {
     getItem();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  function search(val: string) {
-    if (val === "") setSeries(tempSeries);
-    else {
-      const filtered = tempSeries.filter((item) => {
-        //console.log(item.title, val, "==>", item.title.includes(val));
-        return item.title.toLowerCase().includes(val);
-      });
-      setSeries(filtered);
-      console.log(tempSeries);
-      console.log(series);
-      console.log(filtered);
+  useEffect(() => {
+    function search(val: string) {
+      if (val === "") setSeries(tempSeries);
+      else {
+        const filtered = tempSeries.filter((item) => {
+          //console.log(item.title, val, "==>", item.title.includes(val));
+          return item.title.toLowerCase().includes(val.toLowerCase());
+        });
+        setSeries(filtered);
+      }
+      setTitle(val);
     }
-    setTitle(val);
-  }
+    //call function when something change in state
+    search(title);
+  }, [tempSeries, title]);
 
   function compare(a: any, b: any) {
     let A = a.currentEpisode / a.maxEpisode;
@@ -90,20 +90,19 @@ const App: NextPage = () => {
           where("uid", "==", user?.uid)
         );
         const getSeries = await getDocs(q);
-        let tempSeries = [] as any;
+        let temp = [] as any;
         getSeries.forEach((doc) => {
           let tempData = doc.data();
           tempData["itemId"] = doc.id;
-          tempSeries.push(tempData);
+          temp.push(tempData);
         });
         // console.log(tempSeries);
-        tempSeries.sort(compare);
-        setSeries(tempSeries);
-        setTempSeries(tempSeries);
+        temp.sort(compare);
+        setTempSeries(temp);
+
         setIsloading(false);
       }
     });
-    setTitle("");
   }
 
   function setPopUp(data: any) {
@@ -135,7 +134,6 @@ const App: NextPage = () => {
           toast.notify("Added", "success");
         });
       });
-      setTitle("");
     }
   }
 
@@ -163,7 +161,7 @@ const App: NextPage = () => {
               type="text"
               placeholder="Search or add item"
               onChange={(e) => {
-                search(e.target.value);
+                setTitle(e.target.value);
               }}
             />
           </div>
