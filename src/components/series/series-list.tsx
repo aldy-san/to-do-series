@@ -4,6 +4,7 @@ import SeriesItem from "./series-item";
 interface Props {
   data: Array<any>;
   isLoading: Boolean;
+  showCompleted: Boolean;
   getItem: () => void;
   setPopUp: (data: any) => void;
 }
@@ -30,6 +31,7 @@ const SeriesList: NextPage<Props> = (Props) => {
             data={item}
             getItem={Props.getItem}
             setItemPopUp={Props.setPopUp}
+            showCompleted={Props.showCompleted}
           />
         );
       })}

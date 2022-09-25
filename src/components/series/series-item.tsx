@@ -16,6 +16,7 @@ type items = {
 
 type item = {
   data: items;
+  showCompleted: Boolean;
   getItem: () => void;
   setItemPopUp: (data: any) => void;
 };
@@ -61,7 +62,12 @@ export default function SeriesItem(data: item) {
 
   return (
     <>
-      <div className="flex flex-col col-span-1 p-4 shadow-md rounded-lg space-y-3 max-h-min">
+      <div
+        className={
+          "flex flex-col col-span-1 p-4 shadow-md rounded-lg space-y-3 max-h-min" +
+          (data.showCompleted && data.data.isCompleted ? " hidden" : "")
+        }
+      >
         <div className="relative w-full h-4 rounded-full bg-gray-200">
           <div
             className={

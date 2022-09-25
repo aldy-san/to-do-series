@@ -47,6 +47,7 @@ const App: NextPage = () => {
   const [itemPopUp, setItemPopUp] = useState<itemSeries>(itemDefault);
   const [user] = useAuthState(auth);
   const [isLoading, setIsloading] = useState(false);
+  const [showCompleted, setShowCompleted] = useState(false);
 
   useEffect(() => {
     getItem();
@@ -175,7 +176,32 @@ const App: NextPage = () => {
         </div>
         <div className="flex flex-col space-y-1 mt-4">
           <p>{title ? "Search: " + title : ""}</p>
-          <p>Found {series.length} data</p>
+          <p>
+            Found <span className="font-bold">{series.length}</span> item
+          </p>
+          <p>
+            Not Complete{" "}
+            <span className="font-bold">
+              {series.filter((item) => item.isCompleted).length}
+            </span>{" "}
+            item
+          </p>
+          <p>
+            Completed{" "}
+            <span className="font-bold">
+              {series.filter((item) => !item.isCompleted).length}
+            </span>{" "}
+            item
+          </p>
+        </div>
+        <div className="flex flex-col space-y-1 mt-4">
+          <Button
+            text={showCompleted ? "Hide Completed" : "Show Completed"}
+            className="bg-green-600"
+            onClick={() => {
+              setShowCompleted(!showCompleted);
+            }}
+          />
         </div>
         {/* LIST ITEM */}
         <SeriesList
@@ -183,6 +209,7 @@ const App: NextPage = () => {
           getItem={getItem}
           setPopUp={setPopUp}
           isLoading={isLoading}
+          showCompleted={showCompleted}
         />
         {/* EDIT POP UP */}
         <div
