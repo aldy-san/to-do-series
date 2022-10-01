@@ -180,14 +180,14 @@ const App: NextPage = () => {
             Found <span className="font-bold">{series.length}</span> item
           </p>
           <p>
-            Not Complete{" "}
+            Complete{" "}
             <span className="font-bold">
               {series.filter((item) => item.isCompleted).length}
             </span>{" "}
             item
           </p>
           <p>
-            Completed{" "}
+            Not Completed{" "}
             <span className="font-bold">
               {series.filter((item) => !item.isCompleted).length}
             </span>{" "}
